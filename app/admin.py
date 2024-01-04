@@ -4,7 +4,7 @@ from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from flask_admin import BaseView, expose
 from flask_login import logout_user, current_user
-from flask import redirect
+from flask import redirect, render_template
 
 
 admin = Admin(app=app, name='Quản trị bán hàng', template_mode='bootstrap4')
@@ -45,6 +45,18 @@ class LogoutView(AuthenticatedUser):
         logout_user()
         return redirect('/admin')
 
+class Book(AuthenticatedUser):
+    @expose("/")
+    def index(self):
+        return self.render('admin/book.html')
+
+class QuiDinh(AuthenticatedUser):
+    @expose("/")
+    def index(self):
+        return self.render('admin/rule.html')
+
+admin.add_view(Book(name='Nhập sách'))
+admin.add_view(QuiDinh(name='Quy định'))
 admin.add_view(MyCategoryView(Category, db.session))
 admin.add_view(MyProductView(Product, db.session))
 admin.add_view(StatsView(name='Thông kê báo cáo'))

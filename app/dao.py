@@ -65,3 +65,8 @@ def add_user(name,username,password,avatar):
     db.session.add(u)
     db.session.commit()
 
+def add_product(name, price, image, active, category_id, quantity):
+    p = Product(name=name, image=image, active=active, category_id=category_id, quantity=quantity)
+    db.session.add(p)
+    db.session.commit()
+
