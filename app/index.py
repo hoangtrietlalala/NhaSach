@@ -4,8 +4,28 @@ from flask import render_template, request, redirect, jsonify, session, url_for
 import dao
 import utils
 from app import app, login
-from flask_login import login_user, logout_user
+from flask_login import login_user, logout_user, login_required
 from app.models import UserRoleEnum
+
+
+@app.route('/products/<id>')
+def details(id):
+    comments = dao.get_comments_by_prod_id(id)
+    return render_template('details.html', product=dao.get_product_by_id(id), comments=comments)
+
+
+@app.route("/api/products/<id>/comments", methods=['post'])
+@login_required
+def add_comment(id):
+    content = request.json.get('content')
+
+    try:
+        c = dao.add_comment(product_id=id, content=content)
+    except:
+        return jsonify({'status': 500, 'err_msg': 'Hệ thống đang có lỗi!'})
+    else:
+
+        return jsonify({'status': 200, "c": {'content': c.content, "user": {"avatar": c.user.avatar}}})
 
 @app.route("/")
 def index():
@@ -181,6 +201,7 @@ def common_responses():
         'categories': dao.get_categories(),
         'cart_stats': utils.count_cart(session.get('cart'))
     }
+
 
 @login.user_loader
 def load_user(user_id):
