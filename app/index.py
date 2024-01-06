@@ -96,6 +96,19 @@ def add_product():
 
     return render_template('book.html')
 
+@app.route('/admin/quidinh', methods=['GET', 'POST'])
+def edit_rule():
+    if request.method == 'POST':
+        minQuantity = request.form['minQuantity']
+        minQuantityInStorage = request.form['minQuantityInStorage']
+
+        dao.edit_rule(minQuantity, minQuantityInStorage)
+
+        return redirect('/admin/rule')
+
+    return render_template('rule.html')
+
+
 @app.route("/cart")
 def cart():
     return render_template('cart.html')

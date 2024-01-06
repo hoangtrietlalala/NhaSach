@@ -21,16 +21,24 @@ class AuthenticatedUser(BaseView):
 
 
 class MyProductView(AuthenticatedAdmin):
-    column_list = ['id', 'name', 'price', 'active']
+    column_list = ['id', 'name', 'price','quantity','active']
     column_searchable_list = ['name']
     column_filters = ['name', 'price']
     column_editable_list = ['name', 'price']
     create_modal = True
     edit_modal = True
+    can_create = False
+
 
 
 class MyCategoryView(AuthenticatedAdmin):
     column_list = ['id', 'name', 'products']
+    column_searchable_list = ['name']
+    column_filters = ['name' ]
+    column_editable_list = ['name']
+    create_modal = True
+    edit_modal = True
+
 
 
 class StatsView(AuthenticatedUser):
@@ -62,6 +70,7 @@ class QuiDinh(AuthenticatedUser):
     @expose("/")
     def index(self):
         return self.render('admin/rule.html')
+
 
 admin.add_view(Book(name='Nhập sách'))
 admin.add_view(QuiDinh(name='Quy định'))

@@ -1,6 +1,6 @@
 from sqlalchemy import func
 
-from app.models import Category, Product, User, Receipt, ReceiptDetails, UserRoleEnum, Comment
+from app.models import Category, Product, User, Receipt, ReceiptDetails, UserRoleEnum, Comment, Rule
 from app import app, db
 import hashlib
 from flask_login import current_user
@@ -70,7 +70,9 @@ def add_user(name,username,password,avatar):
 
 
 def Report_frequency(kw=None):
-    query = db.session.query(Product.id, Product.name, func.sum(ReceiptDetails.price*ReceiptDetails.quantity),func.count(Product.id) ,func.sum(Product.id))\
+
+
+    query = db.session.query(Product.id, Product.name, func.sum(ReceiptDetails.price*ReceiptDetails.quantity), func.sum(ReceiptDetails.quantity))\
                      .join(ReceiptDetails, ReceiptDetails.product_id == Product.id).group_by(Product.id)
     if kw:
         query = query.filter(Product.name.contains(kw))
@@ -109,6 +111,12 @@ def count_products_by_cate():
 def add_product(name, price, image, active, category_id, quantity):
     p = Product(name=name, image=image, active=active, category_id=category_id, quantity=quantity)
     db.session.add(p)
+    db.session.commit()
+
+def edit_rule(minQuantity, minQuantityInStorage):
+    r = Rule.query.first()
+    r.minQuantity = minQuantity
+    r.minQuantityInStorage = minQuantityInStorage
     db.session.commit()
 
 if __name__ == '__main__':
