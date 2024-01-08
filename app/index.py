@@ -31,7 +31,7 @@ def user_logged_out(func): # Định nghĩa hàm user_logged_out
 @app.route('/products/<id>')
 def details(id):
     comments = dao.get_comments_by_prod_id(id)
-    return render_template('details.html', product=dao.get_product_by_id(id), comments=comments)
+    return render_template('details.html',UserRoleEnum=UserRoleEnum, product=dao.get_product_by_id(id), comments=comments)
 
 
 @app.route("/api/products/<id>/comments", methods=['post'])
@@ -118,8 +118,9 @@ def add_product():
         if quantity < minQuantity:
             flash("Số lượng không hợp lệ", "error")
             #return render_template('book.html')
-        flash("Thành công", "success")
-        dao.add_product(name,price,image,active,category_id,quantity)
+        else:
+            flash("Thành công", "success")
+            dao.add_product(name,price,image,active,category_id,quantity)
 
         return redirect('/admin/book') # Chuyển hướng sau khi thêm sản phẩm thành công
 
@@ -141,7 +142,7 @@ def rule():
 
 @app.route("/cart")
 def cart():
-    return render_template('cart.html')
+    return render_template('cart.html', UserRoleEnum=UserRoleEnum)
 
 
 @app.route("/api/cart", methods=['post'])
@@ -237,7 +238,7 @@ def login_view():
 
         return redirect("/")
 
-    return render_template('login.html')
+    return render_template('login.html', UserRoleEnum=UserRoleEnum)
 
 
 

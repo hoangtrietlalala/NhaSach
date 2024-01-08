@@ -71,11 +71,16 @@ class Rule(AuthenticatedUser):
     def index(self):
         return self.render('admin/rule.html')
 
+class HomePage(AuthenticatedUser):
+    @expose("/")
+    def index(self):
+        return redirect('/')
 
 admin.add_view(Book(name='Nhập sách'))
 admin.add_view(Rule(name='Quy định'))
 admin.add_view(MyCategoryView(Category, db.session))
 admin.add_view(MyProductView(Product, db.session))
 admin.add_view(StatsView(name='Thông kê báo cáo'))
+admin.add_view(HomePage(name="Trang chủ"))
 admin.add_view(LogoutView(name='Đăng xuất'))
 
