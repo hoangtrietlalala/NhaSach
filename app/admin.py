@@ -45,9 +45,9 @@ class StatsView(AuthenticatedUser):
     @expose("/")
     def index(self):
         kw = request.args.get("kw")
-        return self.render('admin/stats.html',
+        return self.render('admin/reports.html',
                            stats=dao.Report_frequency(kw),
-                           month_stats=dao.revenue_stats_by_month())
+                           month_stats=dao.revenue_month(2024))
 
 
 class LogoutView(AuthenticatedUser):
@@ -66,14 +66,14 @@ class Book(AuthenticatedUser):
     def index(self):
         return self.render('admin/book.html')
 
-class QuiDinh(AuthenticatedUser):
+class Rule(AuthenticatedUser):
     @expose("/")
     def index(self):
         return self.render('admin/rule.html')
 
 
 admin.add_view(Book(name='Nhập sách'))
-admin.add_view(QuiDinh(name='Quy định'))
+admin.add_view(Rule(name='Quy định'))
 admin.add_view(MyCategoryView(Category, db.session))
 admin.add_view(MyProductView(Product, db.session))
 admin.add_view(StatsView(name='Thông kê báo cáo'))
